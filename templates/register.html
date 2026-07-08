@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register — Phishing Scanner</title>
+<style>
+body{font-family:Arial;max-width:360px;margin:100px auto;background:#0A0E14;color:#E7ECF3}
+input{width:100%;padding:10px;margin:6px 0;background:#10151F;border:1px solid #2A3646;color:#fff;border-radius:6px;box-sizing:border-box}
+button{width:100%;padding:10px;background:#4FA8FF;border:none;border-radius:6px;font-weight:bold;cursor:pointer;margin-top:8px}
+a{color:#4FA8FF}
+</style>
+</head>
+<body>
+<h2>Create account</h2>
+<form method="POST">
+  <input name="username" placeholder="Username" required>
+  <input name="password" type="password" placeholder="Password" required>
+  <button type="submit">Register</button>
+</form>
+<p>Already have an account? <a href="/login">Log in</a></p>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}<p style="color:#FF5470">{{ messages[0] }}</p>{% endif %}
+{% endwith %}
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard — Phishing Scanner</title>
+<style>
+body{font-family:'Segoe UI',Arial;background:#0A0E14;color:#E7ECF3;margin:0;padding:40px 20px}
+.wrap{max-width:800px;margin:0 auto}
+h1{font-size:24px;margin-bottom:4px}
+.nav{margin-bottom:28px}
+.nav a{color:#4FA8FF;text-decoration:none;margin-right:16px;font-size:14px}
+.stats{display:flex;gap:16px;margin-bottom:28px}
+.stat{flex:1;background:#10151F;border:1px solid #1E2733;border-radius:10px;padding:16px}
+.stat-label{font-size:12px;color:#7C8798;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px}
+.stat-value{font-size:26px;font-weight:700;margin:0}
+.safe-color{color:#23D9A0}
+.danger-color{color:#FF5470}
+table{width:100%;border-collapse:collapse;background:#10151F;border-radius:10px;overflow:hidden}
+th,td{text-align:left;padding:12px 14px;font-size:13.5px;border-bottom:1px solid #1E2733}
+th{color:#7C8798;font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:1px}
+td.url{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Consolas',monospace}
+.badge{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.badge.safe{background:#123B31;color:#23D9A0}
+.badge.danger{background:#3A1620;color:#FF5470}
+.empty{color:#7C8798;padding:40px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Scan dashboard</h1>
+  <div class="nav">
+    <a href="/">New scan</a>
+    <a href="/logout">Log out</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <p class="stat-label">Total scans</p>
+      <p class="stat-value">{{ total }}</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">Flagged phishing</p>
+      <p class="stat-value danger-color">{{ flagged }}</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">Safe</p>
+      <p class="stat-value safe-color">{{ safe }}</p>
+    </div>
+    <div class="stat">
+      <p class="stat-label">Flag rate</p>
+      <p class="stat-value">{{ flagged_pct }}%</p>
+    </div>
+  </div>
+
+  {% if scans %}
+  <table>
+    <tr><th>URL</th><th>Verdict</th><th>Confidence</th><th>Scanned</th></tr>
+    {% for s in scans %}
+    <tr>
+      <td class="url">{{ s.url }}</td>
+      <td>
+        {% if s.is_phishing %}
+          <span class="badge danger">Phishing</span>
+        {% else %}
+          <span class="badge safe">Safe</span>
+        {% endif %}
+      </td>
+      <td>{{ s.confidence }}%</td>
+      <td>{{ s.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <div class="empty">No scans yet. <a href="/" style="color:#4FA8FF">Run your first scan</a>.</div>
+  {% endif %}
+</div>
+</body>
+</html>
