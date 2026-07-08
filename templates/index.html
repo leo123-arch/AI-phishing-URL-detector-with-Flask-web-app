@@ -283,6 +283,16 @@
     color: var(--text-faint);
     line-height: 1.6;
   }
+  @media (max-width: 480px) {
+  body { padding: 32px 14px; }
+  h1 { font-size: 22px; }
+  .input-row { flex-direction: column; }
+  .prompt-prefix { display: none; }
+  button { padding: 12px; width: 100%; }
+  .result-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .examples { gap: 6px; }
+  .example-chip { font-size: 11px; padding: 5px 10px; }
+}
 </style>
 </head>
 <body>

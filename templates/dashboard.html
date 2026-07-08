@@ -22,6 +22,14 @@ td.url{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
 .badge.safe{background:#123B31;color:#23D9A0}
 .badge.danger{background:#3A1620;color:#FF5470}
 .empty{color:#7C8798;padding:40px;text-align:center}
+@media (max-width: 600px) {
+  .stats { flex-wrap: wrap; }
+  .stat { min-width: 45%; }
+  table { font-size: 12px; }
+  td.url { max-width: 120px; }
+  th, td { padding: 8px 6px; }
+  .nav a { display: inline-block; margin-bottom: 8px; }
+}
 </style>
 </head>
 <body>
