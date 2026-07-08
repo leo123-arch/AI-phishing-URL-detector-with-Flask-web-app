@@ -4,6 +4,9 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import joblib, pandas as pd, re, math
+import csv
+import io
+from flask import Response
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'change-this-to-something-random-later'
@@ -36,7 +39,7 @@ class Scan(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -122,8 +125,29 @@ def explain(features):
 
 @app.route('/')
 @login_required
+
 def home():
     return render_template('index.html')
+
+@app.route('/download-report')
+def download_report():
+    scans = Scan.query.filter_by(user_id=current_user.id).order_by(Scan.timestamp.desc()).all()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['URL', 'Verdict', 'Confidence (%)', 'Scanned At'])
+
+    for s in scans:
+        writer.writerow([
+            s.url,
+            'Phishing' if s.is_phishing else 'Safe',
+            s.confidence,
+            s.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        ])
+
+    response = Response(output.getvalue(), mimetype='text/csv')
+    response.headers['Content-Disposition'] = f'attachment; filename=phishing_scan_report_{current_user.username}.csv'
+    return response
 
 
 @app.route('/check', methods=['POST'])
